@@ -26,7 +26,7 @@ export default function ForgotPassword() {
         setIsLoading(false);
         setTimeout(() => {
           navigate(
-            `/${crypto.randomUUID()}/otp/${crypto.randomUUID()}/${cnic}/verification/${crypto.randomUUID()}`
+            `/4d1da864-3bab-433b-aca6-128fd69e0ccf/otp/4d1da864-3bab-433b-aca6-128fd69e0ccf/${cnic}/verification/4d1da864-3bab-433b-aca6-128fd69e0ccf`
           );
         }, 1000);
       })

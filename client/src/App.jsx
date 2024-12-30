@@ -156,7 +156,7 @@ function App() {
     setUser("");
     setUserData(null);
     setIsAdmin(null);
-    window.location.href = `/signin/${crypto.randomUUID()}`;
+    window.location.href = `/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`;
   };
 
   // Protect authenticated routes
@@ -171,7 +171,7 @@ function App() {
     return isAuthenticated && isAdmin === false ? (
       children
     ) : (
-      <Navigate to={`/signin/${crypto.randomUUID()}`} />
+      <Navigate to={`/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`} />
     );
   };
 

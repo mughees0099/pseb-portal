@@ -49,7 +49,7 @@ export default function CandidateRegistration() {
       .then(() => {
         setIsLoading(false);
         navigate(
-          `/${crypto.randomUUID()}/account/${crypto.randomUUID()}/verification/${crypto.randomUUID()}`,
+          `/4d1da864-3bab-433b-aca6-128fd69e0ccf/account/4d1da864-3bab-433b-aca6-128fd69e0ccf/verification/4d1da864-3bab-433b-aca6-128fd69e0ccf`,
           { state: { email: formData.email } }
         );
         toast.success(
@@ -75,7 +75,7 @@ export default function CandidateRegistration() {
         <div className="text-sm text-gray-600 text-center mb-8">
           Already have an account?{" "}
           <Link
-            to={`/signin/${crypto.randomUUID()}`}
+            to={`/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`}
             className="text-purple-600 underline"
           >
             Sign in

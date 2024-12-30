@@ -7,7 +7,7 @@ export default function Sidebar({ open, setOpen }) {
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("id");
-    window.location.href = `/signin/${crypto.randomUUID()}`;
+    window.location.href = `/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`;
   };
   return (
     <div

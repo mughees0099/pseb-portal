@@ -112,7 +112,7 @@ export default function SignIn() {
             <label>
               Forgot Password?{" "}
               <Link
-                to={`/forgot/${crypto.randomUUID()}/password/${crypto.randomUUID()}`}
+                to={`/forgot/4d1da864-3bab-433b-aca6-128fd69e0ccf/password/4d1da864-3bab-433b-aca6-128fd69e0ccf`}
               >
                 <span className="text-purple-500 underline cursor-pointer">
                   Reset Password
@@ -133,7 +133,7 @@ export default function SignIn() {
           </button>
           <div className=" text-center">
             <Link
-              to={`/register/${crypto.randomUUID()}/new/${crypto.randomUUID()}`}
+              to={`/register/4d1da864-3bab-433b-aca6-128fd69e0ccf/new/4d1da864-3bab-433b-aca6-128fd69e0ccf`}
             >
               <label>
                 {`Don't`} have an account?{" "}
@@ -212,7 +212,7 @@ export default function SignIn() {
               <label>
                 Forgot Password?{" "}
                 <Link
-                  to={`/forgot/${crypto.randomUUID()}/password/${crypto.randomUUID()}`}
+                  to={`/forgot/4d1da864-3bab-433b-aca6-128fd69e0ccf/password/4d1da864-3bab-433b-aca6-128fd69e0ccf`}
                 >
                   <span className="text-purple-500 underline hover:text-purple-700 cursor-pointer">
                     Reset Password
@@ -239,7 +239,7 @@ export default function SignIn() {
 
             <div className="text-center">
               <Link
-                to={`/register/${crypto.randomUUID()}/new/${crypto.randomUUID()}`}
+                to={`/register/4d1da864-3bab-433b-aca6-128fd69e0ccf/new/4d1da864-3bab-433b-aca6-128fd69e0ccf`}
               >
                 <label>
                   Don&#39;t have an account?{" "}

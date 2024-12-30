@@ -27,7 +27,7 @@ export function ResetPasswordOtp() {
         });
         setTimeout(() => {
           navigate(
-            `/reset/${crypto.randomUUID()}/pa/${crypto.randomUUID()}/${cnic}/ss/${crypto.randomUUID()}`
+            `/reset/4d1da864-3bab-433b-aca6-128fd69e0ccf/pa/4d1da864-3bab-433b-aca6-128fd69e0ccf/${cnic}/ss/4d1da864-3bab-433b-aca6-128fd69e0ccf`
           );
         }, 1000);
       })
@@ -134,7 +134,7 @@ export function ResetPassword() {
             position: "top-right",
             autoClose: 1000,
           });
-          navigate(`/signin/${crypto.randomUUID()}`);
+          navigate(`/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`);
         })
         .catch((err) => {
           toast.error(

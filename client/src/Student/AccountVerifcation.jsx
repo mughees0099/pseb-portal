@@ -22,7 +22,7 @@ export default function AccountVerification() {
           autoClose: 2000,
         });
 
-        navigate(`/signin/${crypto.randomUUID()}`);
+        navigate(`/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`);
       })
 
       .catch((err) => {
