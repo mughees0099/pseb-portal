@@ -35,7 +35,7 @@ export default function StudentDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/user/${cnic}`).then((res) => {
+    axios.get(`${import.meta.env.VITE_API_URL}/user/${cnic}`).then((res) => {
       setStudentData(res.data);
       setProfilePic(res.data.profileImageUrl);
       setCnicFront(res.data.cnicFrontUrl);
@@ -43,7 +43,7 @@ export default function StudentDetail() {
       setDegree(res.data.degreeUrl);
     });
 
-    axios.get(`http://localhost:4000/course/${cnic}`).then((res) => {
+    axios.get(`${import.meta.env.VITE_API_URL}/course/${cnic}`).then((res) => {
       setStudentTrade(res.data);
     });
   }, [cnic]);
@@ -113,7 +113,7 @@ export default function StudentDetail() {
       formDataToSend.append("folder", folder);
 
       const cloudinaryResponse = await axios.post(
-        "https://api.cloudinary.com/v1_1/dii1dnemg/image/upload",
+        import.meta.env.VITE_CLOUDINARY_URL,
         formDataToSend,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -197,7 +197,7 @@ export default function StudentDetail() {
     setStudentData(updatedData);
 
     await axios
-      .patch(`http://localhost:4000/user/${cnic}/${trade}`, {
+      .patch(`${import.meta.env.VITE_API_URL}/user/${cnic}/${trade}`, {
         ...updatedData,
         fullName,
         fatherName,

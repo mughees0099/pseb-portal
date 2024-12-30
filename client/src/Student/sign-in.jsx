@@ -14,7 +14,7 @@ export default function SignIn() {
     const cnic = e.target[0].value;
     const password = e.target[1].value;
     axios
-      .post("http://localhost:4000/signin", { cnic, password })
+      .post(`${import.meta.env.VITE_API_URL}/signin`, { cnic, password })
       .then((res) => {
         localStorage.setItem("id", res.data.cnic);
         localStorage.setItem("user", JSON.stringify(res.data.token));

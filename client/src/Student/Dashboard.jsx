@@ -38,7 +38,7 @@ function ApplicationsTable({ cnic }) {
   const [selectedCourses, setSelectedCourses] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/course/${cnic}`).then((res) => {
+    axios.get(`${import.meta.env.VITE_API_URL}/course/${cnic}`).then((res) => {
       setSelectedCourses(res.data);
     });
   }, [cnic]);

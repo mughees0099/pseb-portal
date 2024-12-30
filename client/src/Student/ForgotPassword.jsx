@@ -16,7 +16,7 @@ export default function ForgotPassword() {
   function handleForgotPassword() {
     setIsLoading(true);
     axios
-      .post("http://localhost:4000/forgot-password", { cnic })
+      .post(`${import.meta.env.VITE_API_URL}/forgot-password`, { cnic })
       .then(() => {
         toast.success("OTP sent to email.", {
           position: "top-right",

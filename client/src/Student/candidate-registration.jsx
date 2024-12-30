@@ -45,7 +45,7 @@ export default function CandidateRegistration() {
     e.preventDefault();
     setIsLoading(true);
     axios
-      .post("http://localhost:4000/register", formData)
+      .post(`${import.meta.env.VITE_API_URL}/register`, formData)
       .then(() => {
         setIsLoading(false);
         navigate(

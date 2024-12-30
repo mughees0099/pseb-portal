@@ -224,7 +224,7 @@ export function CourseDetail({ userData }) {
     const status = "Pending";
     const category = userData.category;
     axios
-      .post("http://localhost:4000/course", {
+      .post(`${import.meta.env.VITE_API_URL}/course`, {
         cnic,
         trade,
         program,

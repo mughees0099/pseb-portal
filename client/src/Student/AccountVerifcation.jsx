@@ -14,7 +14,7 @@ export default function AccountVerification() {
   const verifyOtp = () => {
     setIsLoading(true);
     axios
-      .post(`http://localhost:4000/verify-otp/${email}`, { otp })
+      .post(`${import.meta.env.VITE_API_URL}/verify-otp/${email}`, { otp })
       .then(() => {
         setIsLoading(false);
         toast.success("Account verified successfully!", {
