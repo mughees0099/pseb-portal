@@ -1,0 +1,43 @@
+/* .checked-disabled:checked:disabled {
+  background-color: blue;
+  border-color: blue;
+} */
+
+.custom-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db; /* Tailwind gray-300 */
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-radio:checked {
+  border-color: blue;
+  background-color: blue;
+}
+
+.custom-radio:checked::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-radio:disabled {
+  cursor: not-allowed;
+}
+
+.custom-radio.checked-disabled:checked {
+  border-color: blue;
+  background-color: blue;
+}

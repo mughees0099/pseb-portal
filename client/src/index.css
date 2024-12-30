@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes color-change {
+  0%,
+  100% {
+    color: yellow;
+    scale: 1.05;
+  }
+  50% {
+    color: red;
+    scale: 1;
+  }
+}
+
+.apply-now {
+  animation: color-change 1.5s infinite;
+}
