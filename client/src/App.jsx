@@ -94,16 +94,16 @@
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       await axios
-//         .get("http://localhost:5000/users")
+//         .get("http://localhost:4000/users")
 //         .then((res) => setUserInfo(res.data));
 
 //       await axios
-//         .get("http://localhost:5000/courses")
+//         .get("http://localhost:4000/courses")
 //         .then((res) => setCourses(res.data));
 //       const results = await Promise.all(
 //         uniqueData.map((student) =>
 //           axios
-//             .get(`http://localhost:5000/user/${student.cnic}`)
+//             .get(`http://localhost:4000/user/${student.cnic}`)
 //             .then((res) => res.data)
 //             .catch(() => {
 //               return null;
@@ -130,7 +130,7 @@
 //   useEffect(() => {
 //     if (isAuthenticated) {
 //       axios
-//         .get(`http://localhost:5000/user/${user}`)
+//         .get(`http://localhost:4000/user/${user}`)
 //         .then((res) => {
 //           setUserData(res.data);
 //           setIsAdmin(res.data.isAdmin);
@@ -139,7 +139,7 @@
 //           setUserData({});
 //           setIsAdmin(false);
 //         });
-//       axios.get("http://localhost:5000/admin").then((res) => {
+//       axios.get("http://localhost:4000/admin").then((res) => {
 //         setAdminData(res.data);
 //       });
 //     } else {
@@ -467,16 +467,16 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       await axios
-        .get("http://localhost:5000/users")
+        .get("http://localhost:4000/users")
         .then((res) => setUserInfo(res.data));
 
       await axios
-        .get("http://localhost:5000/courses")
+        .get("http://localhost:4000/courses")
         .then((res) => setCourses(res.data));
       const results = await Promise.all(
         uniqueData.map((student) =>
           axios
-            .get(`http://localhost:5000/user/${student.cnic}`)
+            .get(`http://localhost:4000/user/${student.cnic}`)
             .then((res) => res.data)
             .catch(() => {
               return null;
@@ -503,7 +503,7 @@ function App() {
   useEffect(() => {
     if (isAuthenticated) {
       axios
-        .get(`http://localhost:5000/user/${user}`)
+        .get(`http://localhost:4000/user/${user}`)
         .then((res) => {
           setUserData(res.data);
           setIsAdmin(res.data.isAdmin);
@@ -512,7 +512,7 @@ function App() {
           setUserData({});
           setIsAdmin(false);
         });
-      axios.get("http://localhost:5000/admin").then((res) => {
+      axios.get("http://localhost:4000/admin").then((res) => {
         setAdminData(res.data);
       });
     } else {

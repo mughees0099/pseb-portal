@@ -439,7 +439,7 @@ App.patch("/user/:id/:trade", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 App.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

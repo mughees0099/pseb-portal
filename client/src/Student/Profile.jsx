@@ -130,7 +130,7 @@
 //         const profileImageUrl = responses[2]?.data.secure_url;
 //         const degreeUrl = responses[3]?.data.secure_url;
 
-//         return axios.post("http://localhost:5000/user", {
+//         return axios.post("http://localhost:4000/user", {
 //           cnic,
 //           fatherName,
 //           gender,
@@ -887,7 +887,7 @@ export default function ProfileForm({ userData }) {
         const profileImageUrl = responses[2]?.data.secure_url;
         const degreeUrl = responses[3]?.data.secure_url;
 
-        return axios.post("http://localhost:5000/user", {
+        return axios.post("http://localhost:4000/user", {
           cnic,
           fatherName,
           gender,

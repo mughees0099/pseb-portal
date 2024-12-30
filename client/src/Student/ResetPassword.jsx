@@ -18,7 +18,7 @@ export function ResetPasswordOtp() {
     setIsLoading(true);
     await axios
 
-      .post(`http://localhost:5000/resetOtp/${cnic}`, { otp })
+      .post(`http://localhost:4000/resetOtp/${cnic}`, { otp })
       .then((res) => {
         setIsLoading(false);
         toast.success(res.data.message || "Password reset successfully!", {
@@ -43,7 +43,7 @@ export function ResetPasswordOtp() {
       });
   };
   useEffect(() => {
-    axios.get(`http://localhost:5000/user/${cnic}`).then((res) => {
+    axios.get(`http://localhost:4000/user/${cnic}`).then((res) => {
       setUerEmail(res.data.email);
     });
   }, []);
@@ -126,7 +126,7 @@ export function ResetPassword() {
   const handleUpdatePassword = () => {
     if (newPassword === confirmPassword) {
       axios
-        .patch(`http://localhost:5000/user/${cnic}`, { password: newPassword })
+        .patch(`http://localhost:4000/user/${cnic}`, { password: newPassword })
         .then((res) => {
           toast.success(res.data.message || "Password updated successfully!", {
             position: "top-right",

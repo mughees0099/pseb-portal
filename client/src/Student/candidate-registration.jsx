@@ -45,7 +45,7 @@ export default function CandidateRegistration() {
     e.preventDefault();
     setIsLoading(true);
     axios
-      .post("http://localhost:5000/register", formData)
+      .post("http://localhost:4000/register", formData)
       .then(() => {
         setIsLoading(false);
         navigate(

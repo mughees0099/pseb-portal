@@ -35,7 +35,7 @@ export default function StudentDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/user/${cnic}`).then((res) => {
+    axios.get(`http://localhost:4000/user/${cnic}`).then((res) => {
       setStudentData(res.data);
       setProfilePic(res.data.profileImageUrl);
       setCnicFront(res.data.cnicFrontUrl);
@@ -43,7 +43,7 @@ export default function StudentDetail() {
       setDegree(res.data.degreeUrl);
     });
 
-    axios.get(`http://localhost:5000/course/${cnic}`).then((res) => {
+    axios.get(`http://localhost:4000/course/${cnic}`).then((res) => {
       setStudentTrade(res.data);
     });
   }, [cnic]);
@@ -197,7 +197,7 @@ export default function StudentDetail() {
     setStudentData(updatedData);
 
     await axios
-      .patch(`http://localhost:5000/user/${cnic}/${trade}`, {
+      .patch(`http://localhost:4000/user/${cnic}/${trade}`, {
         ...updatedData,
         fullName,
         fatherName,

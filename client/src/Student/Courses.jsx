@@ -224,7 +224,7 @@ export function CourseDetail({ userData }) {
     const status = "Pending";
     const category = userData.category;
     axios
-      .post("http://localhost:5000/course", {
+      .post("http://localhost:4000/course", {
         cnic,
         trade,
         program,

@@ -14,7 +14,7 @@ export default function AccountVerification() {
   const verifyOtp = () => {
     setIsLoading(true);
     axios
-      .post(`http://localhost:5000/verify-otp/${email}`, { otp })
+      .post(`http://localhost:4000/verify-otp/${email}`, { otp })
       .then(() => {
         setIsLoading(false);
         toast.success("Account verified successfully!", {

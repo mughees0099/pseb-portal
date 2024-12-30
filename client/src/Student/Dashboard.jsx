@@ -38,7 +38,7 @@ function ApplicationsTable({ cnic }) {
   const [selectedCourses, setSelectedCourses] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/course/${cnic}`).then((res) => {
+    axios.get(`http://localhost:4000/course/${cnic}`).then((res) => {
       setSelectedCourses(res.data);
     });
   }, [cnic]);
