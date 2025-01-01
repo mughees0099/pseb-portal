@@ -58,6 +58,7 @@ export default function CandidateRegistration() {
         );
       })
       .catch((err) => {
+        setIsLoading(false);
         toast.error(
           err.response?.data?.message || "An unexpected error occurred",
           { position: "top-right", autoClose: 2000 }

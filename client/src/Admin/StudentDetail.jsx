@@ -23,6 +23,8 @@ export default function StudentDetail() {
     institute: "",
     percentage: "",
     isCompleted: false,
+    organization: "",
+    designation: "",
   });
 
   const [studentTrade, setStudentTrade] = useState([]);
@@ -227,9 +229,147 @@ export default function StudentDetail() {
       });
   };
 
+  // const generatePDF = useCallback(() => {
+  //   const doc = new jsPDF();
+  //   const lineHeight = 5;
+  //   let yPos = 20;
+
+  //   // Add Profile Image and Name
+  //   doc.setFontSize(22);
+  //   doc.setTextColor(0, 102, 204); // Set heading color
+  //   doc.text("User Profile", 105, yPos, { align: "center" });
+  //   yPos += lineHeight * 2;
+
+  //   if (ProfilePic) {
+  //     doc.addImage(ProfilePic, "JPEG", 80, yPos, 50, 50); // Reduced size of profile image
+  //     yPos += 40;
+  //   }
+
+  //   doc.setFontSize(16);
+  //   doc.setTextColor(0, 0, 0);
+
+  //   const drawHeading = (text) => {
+  //     doc.setFontSize(14);
+  //     doc.setTextColor(0, 102, 204);
+  //     doc.text(text, 20, yPos);
+  //     yPos += lineHeight;
+  //     doc.setFontSize(12);
+  //     doc.setTextColor(0, 0, 0);
+  //   };
+
+  //   const addTable = (headers, data) => {
+  //     const tableX = 20;
+  //     const colWidths = [50, 130];
+  //     const rowHeight = 10;
+  //     let currentY = yPos;
+
+  //     // Draw table headers
+  //     doc.setFillColor(200, 200, 200);
+  //     doc.rect(tableX, currentY, colWidths[0], rowHeight, "F");
+  //     doc.rect(tableX + colWidths[0], currentY, colWidths[1], rowHeight, "F");
+  //     doc.setTextColor(0, 0, 0);
+  //     doc.text(headers[0], tableX + 5, currentY + 7);
+  //     doc.text(headers[1], tableX + colWidths[0] + 5, currentY + 7);
+  //     currentY += rowHeight;
+
+  //     // Draw table rows
+  //     data.forEach((row) => {
+  //       const lines = doc.splitTextToSize(row[1], colWidths[1] - 10);
+  //       const cellHeight = Math.max(rowHeight, lines.length * 7);
+
+  //       doc.rect(tableX, currentY, colWidths[0], cellHeight);
+  //       doc.rect(tableX + colWidths[0], currentY, colWidths[1], cellHeight);
+  //       doc.text(row[0], tableX + 5, currentY + 7);
+  //       doc.text(lines, tableX + colWidths[0] + 5, currentY + 7);
+  //       currentY += cellHeight;
+  //     });
+
+  //     yPos = currentY + 10; // Update yPos for next section
+  //   };
+  //   const age = studentData.dateOfBirth
+  //     ? new Date().getFullYear() -
+  //       new Date(studentData.dateOfBirth).getFullYear()
+  //     : "N/A";
+
+  //   drawHeading("Personal Details");
+  //   addTable(
+  //     ["Field", "Value"],
+  //     [
+  //       ["Full Name", studentData.fullName || "N/A"],
+  //       ["Father's Name", studentData.fatherName || "N/A"],
+  //       ["Gender", studentData.gender || "N/A"],
+  //       ["CNIC No", studentData.cnic || "N/A"],
+  //       ["Mobile No", studentData.mobile || "N/A"],
+  //       ["Email", studentData.email || "N/A"],
+
+  //       ["Category", studentData.category || "N/A"],
+  //       studentData.category === "Government-Employe" ||
+  //         (studentData.category === "IT-Professional" && [
+  //           "Organization",
+  //           studentData.organization || "N/A",
+  //         ]),
+  //       studentData.category === "Government-Employe" ||
+  //         (studentData.category === "IT-Professional" && [
+  //           "Designation",
+  //           studentData.designation || "N/A",
+  //         ]),
+  //       ["Trade", trade || "N/A"],
+  //       [
+  //         "Application Status",
+  //         studentTrade.find((t) => t.trade === trade)?.status || "Pending",
+  //       ],
+  //       ["Age", age || "N/A"],
+  //       ["Address", studentData.address || "N/A"],
+  //     ]
+  //   );
+
+  //   // Check if we need to add a new page
+  //   if (yPos > 250) {
+  //     doc.addPage();
+  //     yPos = 20;
+  //   }
+
+  //   drawHeading("Education Details");
+  //   addTable(
+  //     ["Field", "Value"],
+  //     [
+  //       ["Level", studentData.educationLevel || "N/A"],
+  //       ["Institute", studentData.institute || "N/A"],
+  //       ["Percentage", studentData.percentage || "N/A"],
+  //       ["Completed", studentData.isCompleted ? "Yes" : "No"],
+  //     ]
+  //   );
+
+  //   // Start a new page for each document image
+  //   const addImagePage = (image, label) => {
+  //     if (image) {
+  //       doc.addPage();
+  //       doc.setFontSize(16);
+  //       doc.setTextColor(0, 102, 204);
+  //       doc.text(label, 105, 20, { align: "center" });
+  //       doc.addImage(image, "JPEG", 15, 40, 180, 160);
+  //     }
+  //   };
+
+  //   addImagePage(cnicFront, "CNIC Front");
+  //   addImagePage(cnicBack, "CNIC Back");
+  //   addImagePage(degree, "Degree");
+
+  //   // Save the PDF
+  //   doc.save("user_profile.pdf");
+  // }, [
+  //   studentData,
+  //   studentTrade,
+  //   trade,
+  //   ProfilePic,
+  //   cnicFront,
+  //   cnicBack,
+  //   degree,
+  // ]);
+
   const generatePDF = useCallback(() => {
     const doc = new jsPDF();
-    const lineHeight = 10;
+    const lineHeight = 5;
     let yPos = 20;
 
     // Add Profile Image and Name
@@ -239,8 +379,8 @@ export default function StudentDetail() {
     yPos += lineHeight * 2;
 
     if (ProfilePic) {
-      doc.addImage(ProfilePic, "JPEG", 80, yPos, 30, 30); // Reduced size of profile image
-      yPos += 40;
+      doc.addImage(ProfilePic, "JPEG", 80, yPos, 50, 50); // Adjust size as needed
+      yPos += 50;
     }
 
     doc.setFontSize(16);
@@ -272,39 +412,60 @@ export default function StudentDetail() {
 
       // Draw table rows
       data.forEach((row) => {
-        const lines = doc.splitTextToSize(row[1], colWidths[1] - 10);
-        const cellHeight = Math.max(rowHeight, lines.length * 7);
+        if (row) {
+          const lines = doc.splitTextToSize(row[1] || "N/A", colWidths[1] - 10);
+          const cellHeight = Math.max(rowHeight, lines.length * 7);
 
-        doc.rect(tableX, currentY, colWidths[0], cellHeight);
-        doc.rect(tableX + colWidths[0], currentY, colWidths[1], cellHeight);
-        doc.text(row[0], tableX + 5, currentY + 7);
-        doc.text(lines, tableX + colWidths[0] + 5, currentY + 7);
-        currentY += cellHeight;
+          doc.rect(tableX, currentY, colWidths[0], cellHeight);
+          doc.rect(tableX + colWidths[0], currentY, colWidths[1], cellHeight);
+          doc.text(row[0] || "N/A", tableX + 5, currentY + 7);
+          doc.text(lines, tableX + colWidths[0] + 5, currentY + 7);
+          currentY += cellHeight;
+        }
       });
 
       yPos = currentY + 10; // Update yPos for next section
     };
 
+    const age = studentData.dateOfBirth
+      ? new Date().getFullYear() -
+        new Date(studentData.dateOfBirth).getFullYear()
+      : "N/A";
+
     drawHeading("Personal Details");
-    addTable(
-      ["Field", "Value"],
+
+    const personalDetails = [
+      ["Full Name", studentData.fullName || "N/A"],
+      ["Father's Name", studentData.fatherName || "N/A"],
+      ["Gender", studentData.gender || "N/A"],
+      ["CNIC No", studentData.cnic || "N/A"],
+      ["Mobile No", studentData.mobile || "N/A"],
+      ["Email", studentData.email || "N/A"],
+      ["Category", studentData.category || "N/A"],
+    ];
+
+    // Conditionally add Organization and Designation
+    if (
+      studentData.category === "Government-Employe" ||
+      studentData.category === "IT-Professional"
+    ) {
+      personalDetails.push(
+        ["Organization", studentData.organization || "N/A"],
+        ["Designation", studentData.designation || "N/A"]
+      );
+    }
+
+    personalDetails.push(
+      ["Trade", trade || "N/A"],
       [
-        ["Full Name", studentData.fullName || "N/A"],
-        ["Father's Name", studentData.fatherName || "N/A"],
-        ["Gender", studentData.gender || "N/A"],
-        ["CNIC No", studentData.cnic || "N/A"],
-        ["Mobile No", studentData.mobile || "N/A"],
-        ["Email", studentData.email || "N/A"],
-        ["Category", studentData.category || "N/A"],
-        ["Trade", trade || "N/A"],
-        [
-          "Application Status",
-          studentTrade.find((t) => t.trade === trade)?.status || "Pending",
-        ],
-        ["Age", studentData.age || "N/A"],
-        ["Address", studentData.address || "N/A"],
-      ]
+        "Application Status",
+        studentTrade.find((t) => t.trade === trade)?.status || "Pending",
+      ],
+      ["Age", age || "N/A"],
+      ["Address", studentData.address || "N/A"]
     );
+
+    addTable(["Field", "Value"], personalDetails);
 
     // Check if we need to add a new page
     if (yPos > 250) {
@@ -323,7 +484,7 @@ export default function StudentDetail() {
       ]
     );
 
-    // Start a new page for each document image
+    // Add document images
     const addImagePage = (image, label) => {
       if (image) {
         doc.addPage();
@@ -536,6 +697,36 @@ export default function StudentDetail() {
                   <option value="Fresh-Graduate">Fresh Graduate</option>
                 </select>
               </div>
+              {(studentData.category === "Government-Employe" ||
+                studentData.category === "IT-Professional") && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Organization
+                    </label>
+                    <input
+                      type="text"
+                      name="organization"
+                      value={studentData.organization || ""}
+                      onChange={handleInputChange}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Designation
+                    </label>
+                    <input
+                      type="text"
+                      name="designation"
+                      value={studentData.designation || ""}
+                      onChange={handleInputChange}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    />
+                  </div>
+                </div>
+              )}
+
               <div className="mb-8">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Application Status

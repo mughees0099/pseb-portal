@@ -29,7 +29,7 @@ const Table = ({ data, onEdit }) => {
         </thead>
         <tbody>
           {data.map((row) => (
-            <tr key={crypto.randomUUID()} className="border-b hover:bg-gray-50">
+            <tr key={row.cnic} className="border-b hover:bg-gray-50">
               <td className="px-4 py-2 text-blue-600 font-medium cursor-pointer">
                 {row.fullName}
               </td>

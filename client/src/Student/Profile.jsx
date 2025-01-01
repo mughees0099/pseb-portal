@@ -42,6 +42,8 @@ export default function ProfileForm({ userData }) {
     degreeUrl: userData.degreeUrl || "",
     dateOfBirth: userData.dateOfBirth || "",
     address: userData.address || "",
+    organization: userData.organization || "",
+    designation: userData.designation || "",
   });
 
   useEffect(() => {
@@ -81,6 +83,12 @@ export default function ProfileForm({ userData }) {
     }
   };
   const isFormComplete = () => {
+    const { status, organization, designation } = formData;
+
+    // Check if Organization and Designation are required and filled
+    const isOrganizationRequired =
+      status["Government-Employe"] || status["IT-Professional"];
+    const isOrganizationFilled = organization && designation;
     return (
       formData.fullName &&
       formData.fatherName &&
@@ -98,7 +106,8 @@ export default function ProfileForm({ userData }) {
       qualifications[0]?.institute &&
       qualifications[0]?.percentage &&
       qualifications[0]?.isCompleted !== null &&
-      degree
+      degree &&
+      (!isOrganizationRequired || isOrganizationFilled)
     );
   };
 
@@ -145,6 +154,8 @@ export default function ProfileForm({ userData }) {
           profileImageUrl,
           dateOfBirth: formData.dateOfBirth,
           address: formData.address,
+          organization: formData.organization,
+          designation: formData.designation,
         });
       })
       .then(() => {
@@ -381,6 +392,42 @@ export default function ProfileForm({ userData }) {
                 </div>
               ))}
             </div>
+            {(formData.status["IT-Professional"] ||
+              formData.status["Government-Employe"]) && (
+              <div className="grid grid-cols-1 md:grid-cols-2  gap-6 mt-10">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Organization/Department
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.organization}
+                    onChange={(e) =>
+                      setFormData({ ...formData, organization: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    disabled={userData.organization}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Designation/BPS
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.designation}
+                    onChange={(e) =>
+                      setFormData({ ...formData, designation: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    disabled={userData.designation}
+                    required
+                  />
+                </div>
+              </div>
+            )}
+
             {/*  CNIC Upload */}
             <div className="my-8">
               <h3 className="text-lg font-medium ">Document Upload</h3>

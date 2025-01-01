@@ -371,6 +371,8 @@ App.patch("/user/:id/:trade", async (req, res) => {
     gender,
     dateOfBirth,
     address,
+    organization,
+    designation,
   } = req.body;
 
   const isCompletedBoolean =
@@ -409,6 +411,8 @@ App.patch("/user/:id/:trade", async (req, res) => {
           isCompleted: isCompletedBoolean,
           dateOfBirth,
           address,
+          organization,
+          designation,
         },
       },
       { new: true, runValidators: true }

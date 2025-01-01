@@ -32,7 +32,10 @@ const EnrollmentBarChart = ({ data }) => {
   };
 
   return (
-    <div>
+    <div className=" bg-white rounded-lg p-4">
+      <h1 className=" text-3xl font-bold text-blue-950 text-center pb-5">
+        Enrollment Chart
+      </h1>
       <Bar
         data={chartData}
         options={{

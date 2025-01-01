@@ -150,6 +150,13 @@ const userInformationSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
+    organization: {
+      type: String,
+    },
+    designation: {
+      type: String,
+    },
   },
 
   { timestamps: true }

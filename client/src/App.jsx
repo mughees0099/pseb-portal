@@ -30,10 +30,12 @@ import Batches from "./Admin/pages/Batches";
 import BatchDetails from "./Admin/pages/BatchDetails";
 import MarkAttendance from "./Admin/MarkAttendance";
 import TitleLayout from "./TitleLayout.jsx";
+import { Oval } from "react-loader-spinner";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true);
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -93,6 +95,8 @@ function App() {
   );
 
   useEffect(() => {
+    setDataLoading(true);
+    setLoading(true);
     const fetchData = async () => {
       await axios
         .get(`${import.meta.env.VITE_API_URL}/users`)
@@ -114,21 +118,29 @@ function App() {
 
       setUsersData(results.filter((res) => res !== null));
     };
+
     fetchData();
+    setDataLoading(false);
+    setLoading(false);
   }, [uniqueData]);
 
   // Check if user is logged in
   useEffect(() => {
+    setDataLoading(true);
+    setLoading(true);
     const token = localStorage.getItem("user");
     const user = localStorage.getItem("id");
     if (token) {
       setIsAuthenticated(true);
       setUser(user);
     }
+    setDataLoading(false);
     setLoading(false);
   }, []);
 
   useEffect(() => {
+    setDataLoading(true);
+    setLoading(true);
     if (isAuthenticated) {
       axios
         .get(`${import.meta.env.VITE_API_URL}/user/${user}`)
@@ -147,6 +159,8 @@ function App() {
       setUserData({});
       setIsAdmin(false);
     }
+    setDataLoading(false);
+    setLoading(false);
   }, [user, isAuthenticated]);
 
   const handleLogout = () => {
@@ -161,7 +175,7 @@ function App() {
 
   // Protect authenticated routes
   const PrivateRoute = ({ children }) => {
-    if (loading) {
+    if (loading || dataLoading) {
       return <div>Loading...</div>;
     }
 
@@ -184,6 +198,8 @@ function App() {
   };
 
   useEffect(() => {
+    setDataLoading(true);
+    setLoading(true);
     if (
       isAuthenticated &&
       isAdmin === false &&
@@ -191,7 +207,16 @@ function App() {
     ) {
       window.location.href = "/";
     }
+    setDataLoading(false);
+    setLoading(false);
   }, [isAuthenticated, isAdmin]);
+  if (dataLoading && loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Oval color="#00FF00" height={100} width={100} />;
+      </div>
+    );
+  }
 
   return (
     <>
@@ -405,7 +430,7 @@ function App() {
                   element={isAdmin === true && <MarkAttendance />}
                 />
               </Route>
-              <Route path="*" element={<h1>Not found</h1>} />
+              <Route path="*" element={<h1>Not </h1>} />
             </Routes>
           </main>
         </div>
