@@ -7,7 +7,7 @@ import {
 export const SendVerificationCode = async (email, VerificationCode) => {
   try {
     const response = await transporter.sendMail({
-      from: "Haziq <haziq.corvit@gmail.com>",
+      from: "Rise Ipsec <riphah.ipsec@gmail.com>",
       to: email,
       subject: "Verify Your Email",
       text: "Verify Your Email",
@@ -22,7 +22,7 @@ export const SendVerificationCode = async (email, VerificationCode) => {
 export const SendResetEmail = async (email, VerificationCode) => {
   try {
     const response = await transporter.sendMail({
-      from: "Haziq <haziq.corvit@gmail.com>",
+      from: "Rise Ipsec <riphah.ipsec@gmail.com>",
       to: email,
       subject: "Reset Your Password",
       text: "Reset Your Password",

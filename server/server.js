@@ -26,11 +26,11 @@ connectDB();
 
 const JWT_SECRET = process.env.JWT_TOKEN;
 
-App.get("/", (req, res) => {
+App.get("/api", (req, res) => {
   res.send("Hello World!");
 });
 
-App.get("/user/:id", async (req, res) => {
+App.get("/api/user/:id", async (req, res) => {
   const user = await User.findOne({ cnic: req.params.id }).select("-password");
 
   if (user) {
@@ -47,7 +47,7 @@ App.get("/user/:id", async (req, res) => {
   }
 });
 
-App.post("/user", async (req, res) => {
+App.post("/api/user", async (req, res) => {
   try {
     const userInformation = await UserInformation.create(req.body);
 
@@ -57,7 +57,7 @@ App.post("/user", async (req, res) => {
   }
 });
 
-App.post("/register", async (req, res) => {
+App.post("/api/register", async (req, res) => {
   const { fullName, email, cnic, mobile, password, userName } = req.body;
 
   try {
@@ -115,7 +115,7 @@ App.post("/register", async (req, res) => {
   }
 });
 
-App.post("/verify-otp/:email", async (req, res) => {
+App.post("/api/verify-otp/:email", async (req, res) => {
   const { otp } = req.body;
 
   try {
@@ -154,7 +154,7 @@ App.post("/verify-otp/:email", async (req, res) => {
   }
 });
 
-App.post("/signin", async (req, res) => {
+App.post("/api/signin", async (req, res) => {
   const { cnic, password } = req.body;
 
   try {
@@ -196,7 +196,7 @@ App.post("/signin", async (req, res) => {
   }
 });
 
-App.post("/forgot-password", async (req, res) => {
+App.post("/api/forgot-password", async (req, res) => {
   const { cnic } = req.body;
 
   try {
@@ -232,7 +232,7 @@ App.post("/forgot-password", async (req, res) => {
   }
 });
 
-App.post("/course", async (req, res) => {
+App.post("/api/course", async (req, res) => {
   try {
     const checkCourse = await Course.find({ cnic: req.body.cnic });
     if (checkCourse.length >= 2) {
@@ -251,7 +251,7 @@ App.post("/course", async (req, res) => {
   }
 });
 
-App.get("/course/:id", async (req, res) => {
+App.get("/api/course/:id", async (req, res) => {
   try {
     const course = await Course.find({ cnic: req.params.id });
     if (course) {
@@ -264,7 +264,7 @@ App.get("/course/:id", async (req, res) => {
   }
 });
 
-App.post("/resetOtp/:cnic", async (req, res) => {
+App.post("/api/resetOtp/:cnic", async (req, res) => {
   const { otp } = req.body;
 
   if (!otp) {
@@ -292,7 +292,7 @@ App.post("/resetOtp/:cnic", async (req, res) => {
   }
 });
 
-App.patch("/user/:cnic", async (req, res) => {
+App.patch("/api/user/:cnic", async (req, res) => {
   const { password } = req.body;
 
   try {
@@ -309,7 +309,7 @@ App.patch("/user/:cnic", async (req, res) => {
   }
 });
 
-App.get("/admin", async (req, res) => {
+App.get("/api/admin", async (req, res) => {
   const user = await Course.find({});
 
   if (!user) {
@@ -319,7 +319,7 @@ App.get("/admin", async (req, res) => {
   res.status(200).json(user);
 });
 
-App.get("/users", async (req, res) => {
+App.get("/api/users", async (req, res) => {
   try {
     const users = await User.find({}).select("-password");
     const userData = await Promise.all(
@@ -342,7 +342,7 @@ App.get("/users", async (req, res) => {
   }
 });
 
-App.get("/courses", async (req, res) => {
+App.get("/api/courses", async (req, res) => {
   const courses = await Course.find({});
   if (!courses) {
     return res.status(404).json({ message: "No courses found." });
@@ -351,7 +351,7 @@ App.get("/courses", async (req, res) => {
   res.status(200).json(courses);
 });
 
-App.patch("/user/:id/:trade", async (req, res) => {
+App.patch("/api/user/:id/:trade", async (req, res) => {
   const {
     fullName,
     email,
@@ -379,7 +379,6 @@ App.patch("/user/:id/:trade", async (req, res) => {
     isCompleted === "Yes" ? true : isCompleted === "No" ? false : isCompleted;
 
   try {
-    // Update User collection
     const user = await User.findOneAndUpdate(
       { cnic },
       {
