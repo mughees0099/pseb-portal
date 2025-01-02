@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
 import { Home, Users, BarChart2, X, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 // import Link from 'next/link'
 
 export default function Sidebar({ open, setOpen }) {
+  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("id");
-    window.location.href = `/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`;
+    navigate("/");
   };
   return (
     <div

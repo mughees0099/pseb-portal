@@ -1,11 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useMemo, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import AdminDashboard from "./Admin/page";
 import Sidebar from "./Student/Sidebar";
 import CandidateProfilePage from "./Student/Candidate";
@@ -44,6 +39,7 @@ function App() {
   const [userInfo, setUserInfo] = useState([]);
   const [courses, setCourses] = useState([]);
   const [isAdmin, setIsAdmin] = useState(null);
+  const navigate = useNavigate();
 
   const uniqueData = useMemo(() => {
     return adminData.filter(
@@ -170,7 +166,7 @@ function App() {
     setUser("");
     setUserData(null);
     setIsAdmin(null);
-    window.location.href = `/signin/4d1da864-3bab-433b-aca6-128fd69e0ccf`;
+    navigate("/");
   };
 
   // Protect authenticated routes
@@ -205,7 +201,7 @@ function App() {
       isAdmin === false &&
       window.location.pathname.startsWith("/admin")
     ) {
-      window.location.href = "/";
+      navigate("/");
     }
     setDataLoading(false);
     setLoading(false);
@@ -220,221 +216,217 @@ function App() {
 
   return (
     <>
-      <Router>
+      {!loading &&
+        isAuthenticated &&
+        !window.location.pathname.startsWith("/admin") && (
+          <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        )}
+      <div className="flex h-screen bg-gray-100">
         {!loading &&
           isAuthenticated &&
+          isAdmin === false &&
           !window.location.pathname.startsWith("/admin") && (
-            <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+            <Sidebar
+              open={sidebarOpen}
+              setOpen={setSidebarOpen}
+              handleLogout={handleLogout}
+            />
           )}
-        <div className="flex h-screen bg-gray-100">
-          {!loading &&
-            isAuthenticated &&
-            isAdmin === false &&
-            !window.location.pathname.startsWith("/admin") && (
-              <Sidebar
-                open={sidebarOpen}
-                setOpen={setSidebarOpen}
-                handleLogout={handleLogout}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+          <Routes>
+            {/* Public Routes */}
+            <Route element={<TitleLayout title="Sign In | PSEB" />}>
+              <Route
+                path="/signin/:id"
+                element={
+                  <PublicRoute>
+                    <SignIn />
+                  </PublicRoute>
+                }
               />
-            )}
-          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
-            <Routes>
-              {/* Public Routes */}
-              <Route element={<TitleLayout title="Sign In | PSEB" />}>
-                <Route
-                  path="/signin/:id"
-                  element={
-                    <PublicRoute>
-                      <SignIn />
-                    </PublicRoute>
-                  }
-                />
-              </Route>
+            </Route>
+            <Route
+              element={<TitleLayout title="Candidate Registration | PSEB" />}
+            >
               <Route
-                element={<TitleLayout title="Candidate Registration | PSEB" />}
-              >
-                <Route
-                  path="/register/:id/new/:id"
-                  element={
-                    <PublicRoute>
-                      <CandidateRegistration />
-                    </PublicRoute>
-                  }
-                />
-              </Route>
-              <Route element={<TitleLayout title="Forgot Password | PSEB" />}>
-                <Route
-                  path="/forgot/:id/password/:id"
-                  element={
-                    <PublicRoute>
-                      <ForgotPassword />
-                    </PublicRoute>
-                  }
-                />
-              </Route>
+                path="/register/:id/new/:id"
+                element={
+                  <PublicRoute>
+                    <CandidateRegistration />
+                  </PublicRoute>
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Forgot Password | PSEB" />}>
               <Route
-                element={<TitleLayout title="Account Verification | PSEB" />}
-              >
-                <Route
-                  path="/:id/account/:id/verification/:id"
-                  element={
-                    <PublicRoute>
-                      <AccountVerification />
-                    </PublicRoute>
-                  }
-                />
-              </Route>
+                path="/forgot/:id/password/:id"
+                element={
+                  <PublicRoute>
+                    <ForgotPassword />
+                  </PublicRoute>
+                }
+              />
+            </Route>
+            <Route
+              element={<TitleLayout title="Account Verification | PSEB" />}
+            >
               <Route
-                element={<TitleLayout title="Reset Password OTP | PSEB" />}
-              >
-                <Route
-                  path="/:id/otp/:id/:cnic/verification/:id"
-                  element={
-                    <PublicRoute>
-                      <ResetPasswordOtp />
-                    </PublicRoute>
-                  }
-                />
-              </Route>
-              <Route element={<TitleLayout title="Reset Password | PSEB" />}>
-                <Route
-                  path="/reset/:id/pa/:id/:cnic/ss/:id"
-                  element={
-                    <PublicRoute>
-                      <ResetPassword />
-                    </PublicRoute>
-                  }
-                />
-              </Route>
-              {/* Private Routes */}
-              <Route element={<TitleLayout title="Student Dashboard | PSEB" />}>
-                <Route
-                  path="/"
-                  element={
-                    <PrivateRoute>
-                      <StudentDashboard userData={userData} />
-                    </PrivateRoute>
-                  }
-                />
-              </Route>
-              <Route element={<TitleLayout title="Candidate Profile | PSEB" />}>
-                <Route
-                  path="/candidate/profile/register"
-                  element={
-                    <PrivateRoute>
-                      <CandidateProfilePage userData={userData} />
-                    </PrivateRoute>
-                  }
-                />
-              </Route>
-              <Route element={<TitleLayout title="Student Detail | PSEB" />}>
-                <Route
-                  path="/students/:id"
-                  element={
-                    <PrivateRoute>
-                      <StudentDetail userData={userData} />
-                    </PrivateRoute>
-                  }
-                />
-              </Route>
-              <Route element={<TitleLayout title="Courses | PSEB" />}>
-                <Route
-                  path="/courses"
-                  element={
-                    <PrivateRoute>
-                      <Courses userData={userData} />
-                    </PrivateRoute>
-                  }
-                />
-              </Route>
-              <Route element={<TitleLayout title="Course Detail | PSEB" />}>
-                <Route
-                  path="/course/:courseId/:city"
-                  element={
-                    <PrivateRoute>
-                      <CourseDetail userData={userData} />
-                    </PrivateRoute>
-                  }
-                />
-              </Route>
-              {/* Admin Routes */}
-              <Route element={<TitleLayout title="Admin Dashboard | PSEB" />}>
-                <Route
-                  path="/admin"
-                  element={
-                    isAdmin === true && (
-                      <AdminDashboard
-                        data={adminData}
-                        usersData={usersData}
-                        uniqueData={uniqueData}
-                        tableData={tableData}
-                        enrollmentData={enrollmentData}
-                        courses={courses}
-                      />
-                    )
-                  }
-                />
-              </Route>
-              <Route element={<TitleLayout title="Students | PSEB" />}>
-                <Route
-                  path="/admin/Std"
-                  element={
-                    isAdmin === true && (
-                      <Students
-                        data={adminData}
-                        usersData={usersData}
-                        uniqueData={uniqueData}
-                        tableData={tableData}
-                        enrollmentData={enrollmentData}
-                        userInfo={userInfo}
-                        courses={courses}
-                      />
-                    )
-                  }
-                />
-              </Route>
-              <Route path="/" element={<TableWithFilters data={mockData} />} />
-              <Route element={<TitleLayout title="Edit Student | PSEB" />}>
-                <Route
-                  path="/admin/edit/:cnic/:trade"
-                  element={isAdmin === true && <StudentDetail />}
-                />
-              </Route>
-              <Route element={<TitleLayout title="Reports | PSEB" />}>
-                <Route
-                  path="/admin/reports"
-                  element={isAdmin === true && <Reports />}
-                />
-              </Route>
-              <Route element={<TitleLayout title="Candidates | PSEB" />}>
-                <Route
-                  path="/admin/candidates"
-                  element={isAdmin === true && <CandidatesTable />}
-                />
-              </Route>
-              <Route element={<TitleLayout title="Batches | PSEB" />}>
-                <Route
-                  path="/admin/batches"
-                  element={isAdmin === true && <Batches />}
-                />
-              </Route>
-              <Route element={<TitleLayout title="Batch Details | PSEB" />}>
-                <Route
-                  path="/admin/batches/:batchId"
-                  element={isAdmin === true && <BatchDetails />}
-                />
-              </Route>
-              <Route element={<TitleLayout title="Mark Attendance | PSEB" />}>
-                <Route
-                  path="/admin/batch/:batchId/mark-attendance"
-                  element={isAdmin === true && <MarkAttendance />}
-                />
-              </Route>
-              <Route path="*" element={<h1>Not </h1>} />
-            </Routes>
-          </main>
-        </div>
-      </Router>
+                path="/:id/account/:id/verification/:id"
+                element={
+                  <PublicRoute>
+                    <AccountVerification />
+                  </PublicRoute>
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Reset Password OTP | PSEB" />}>
+              <Route
+                path="/:id/otp/:id/:cnic/verification/:id"
+                element={
+                  <PublicRoute>
+                    <ResetPasswordOtp />
+                  </PublicRoute>
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Reset Password | PSEB" />}>
+              <Route
+                path="/reset/:id/pa/:id/:cnic/ss/:id"
+                element={
+                  <PublicRoute>
+                    <ResetPassword />
+                  </PublicRoute>
+                }
+              />
+            </Route>
+            {/* Private Routes */}
+            <Route element={<TitleLayout title="Student Dashboard | PSEB" />}>
+              <Route
+                path="/"
+                element={
+                  <PrivateRoute>
+                    <StudentDashboard userData={userData} />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Candidate Profile | PSEB" />}>
+              <Route
+                path="/candidate/profile/register"
+                element={
+                  <PrivateRoute>
+                    <CandidateProfilePage userData={userData} />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Student Detail | PSEB" />}>
+              <Route
+                path="/students/:id"
+                element={
+                  <PrivateRoute>
+                    <StudentDetail userData={userData} />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Courses | PSEB" />}>
+              <Route
+                path="/courses"
+                element={
+                  <PrivateRoute>
+                    <Courses userData={userData} />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Course Detail | PSEB" />}>
+              <Route
+                path="/course/:courseId/:city"
+                element={
+                  <PrivateRoute>
+                    <CourseDetail userData={userData} />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            {/* Admin Routes */}
+            <Route element={<TitleLayout title="Admin Dashboard | PSEB" />}>
+              <Route
+                path="/admin"
+                element={
+                  isAdmin === true && (
+                    <AdminDashboard
+                      data={adminData}
+                      usersData={usersData}
+                      uniqueData={uniqueData}
+                      tableData={tableData}
+                      enrollmentData={enrollmentData}
+                      courses={courses}
+                    />
+                  )
+                }
+              />
+            </Route>
+            <Route element={<TitleLayout title="Students | PSEB" />}>
+              <Route
+                path="/admin/Std"
+                element={
+                  isAdmin === true && (
+                    <Students
+                      data={adminData}
+                      usersData={usersData}
+                      uniqueData={uniqueData}
+                      tableData={tableData}
+                      enrollmentData={enrollmentData}
+                      userInfo={userInfo}
+                      courses={courses}
+                    />
+                  )
+                }
+              />
+            </Route>
+            <Route path="/" element={<TableWithFilters data={mockData} />} />
+            <Route element={<TitleLayout title="Edit Student | PSEB" />}>
+              <Route
+                path="/admin/edit/:cnic/:trade"
+                element={isAdmin === true && <StudentDetail />}
+              />
+            </Route>
+            <Route element={<TitleLayout title="Reports | PSEB" />}>
+              <Route
+                path="/admin/reports"
+                element={isAdmin === true && <Reports />}
+              />
+            </Route>
+            <Route element={<TitleLayout title="Candidates | PSEB" />}>
+              <Route
+                path="/admin/candidates"
+                element={isAdmin === true && <CandidatesTable />}
+              />
+            </Route>
+            <Route element={<TitleLayout title="Batches | PSEB" />}>
+              <Route
+                path="/admin/batches"
+                element={isAdmin === true && <Batches />}
+              />
+            </Route>
+            <Route element={<TitleLayout title="Batch Details | PSEB" />}>
+              <Route
+                path="/admin/batches/:batchId"
+                element={isAdmin === true && <BatchDetails />}
+              />
+            </Route>
+            <Route element={<TitleLayout title="Mark Attendance | PSEB" />}>
+              <Route
+                path="/admin/batch/:batchId/mark-attendance"
+                element={isAdmin === true && <MarkAttendance />}
+              />
+            </Route>
+            <Route path="*" element={<h1>Not </h1>} />
+          </Routes>
+        </main>
+      </div>
 
       <ToastContainer />
     </>

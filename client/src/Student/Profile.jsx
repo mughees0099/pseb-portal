@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
 import { useState, useEffect } from "react";
@@ -7,6 +6,8 @@ import { toast } from "react-toastify";
 import { Oval } from "react-loader-spinner";
 import PopUp from "./PopUp";
 import "./Profile.css";
+import { useNavigate } from "react-router-dom";
+import { validateFile } from "./utils/fileValidation.js";
 
 export default function ProfileForm({ userData }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -23,6 +24,7 @@ export default function ProfileForm({ userData }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     fullName: userData.fullName || "",
@@ -67,6 +69,18 @@ export default function ProfileForm({ userData }) {
     });
   };
 
+  const handleFileUpload = (file, setter, fieldName) => {
+    const error = validateFile(file);
+    if (error) {
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    } else {
+      setter(file);
+    }
+  };
+
   const handleAddQualification = () => {
     if (
       currentQualification.educationLevel &&
@@ -82,10 +96,10 @@ export default function ProfileForm({ userData }) {
       });
     }
   };
+
   const isFormComplete = () => {
     const { status, organization, designation } = formData;
 
-    // Check if Organization and Designation are required and filled
     const isOrganizationRequired =
       status["Government-Employe"] || status["IT-Professional"];
     const isOrganizationFilled = organization && designation;
@@ -112,7 +126,7 @@ export default function ProfileForm({ userData }) {
   };
 
   const handleConfirmSave = () => {
-    setIsPopupOpen(false); // Close the popup
+    setIsPopupOpen(false);
     setIsLoading(true);
 
     const uploadPromises = [];
@@ -159,7 +173,11 @@ export default function ProfileForm({ userData }) {
         });
       })
       .then(() => {
-        window.location.reload();
+        toast.success("Record saved successfully", {
+          position: "top-right",
+          autoClose: 2000,
+        });
+        navigate("/");
       })
       .catch((err) => {
         toast.error(
@@ -232,6 +250,7 @@ export default function ProfileForm({ userData }) {
         </div>
 
         <form onSubmit={handleSubmit}>
+          {/* Basic Information Section */}
           <div className="mb-8">
             <h3 className="text-lg font-medium mb-4">
               Basic Information - بنیادی معلومات
@@ -242,6 +261,7 @@ export default function ProfileForm({ userData }) {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Full Name */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Full Name - مکمل نام
@@ -255,6 +275,7 @@ export default function ProfileForm({ userData }) {
                 />
               </div>
 
+              {/* Father's Name */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   {`Father's`} Name - والد کا نام{" "}
@@ -271,6 +292,7 @@ export default function ProfileForm({ userData }) {
                 />
               </div>
 
+              {/* Gender */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Gender - جنس
@@ -290,6 +312,7 @@ export default function ProfileForm({ userData }) {
                 </select>
               </div>
 
+              {/* CNIC/POR No */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   CNIC/POR No - قومی شناختی کارڈ نمبر{" "}
@@ -303,6 +326,7 @@ export default function ProfileForm({ userData }) {
                 />
               </div>
 
+              {/* Mobile No */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Mobile No - موبائل نمبر{" "}
@@ -316,6 +340,7 @@ export default function ProfileForm({ userData }) {
                 />
               </div>
 
+              {/* Email */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Email - ای میل
@@ -328,11 +353,12 @@ export default function ProfileForm({ userData }) {
                   disabled
                 />
               </div>
+
+              {/* Date of Birth */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Date of Birth - تاریخ پیدائش
                 </label>
-
                 <input
                   type="date"
                   value={formData.dateOfBirth}
@@ -341,8 +367,11 @@ export default function ProfileForm({ userData }) {
                   }
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                   required
+                  disabled={userData.dateOfBirth}
                 />
               </div>
+
+              {/* Address */}
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Address - پتہ
@@ -355,11 +384,13 @@ export default function ProfileForm({ userData }) {
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                   placeholder="House No, Street, City"
                   required
+                  disabled={userData.address}
                 ></textarea>
               </div>
             </div>
           </div>
 
+          {/* Status Section */}
           <div className="mb-8">
             <h3 className="text-lg font-medium mb-4">Are you? - کیا آپ ہیں؟</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -437,7 +468,7 @@ export default function ProfileForm({ userData }) {
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-6">
-                {/* cnic  */}
+                {/* CNIC Front */}
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
                   <div className="mb-4">
                     <img
@@ -455,7 +486,13 @@ export default function ProfileForm({ userData }) {
                   <input
                     type="file"
                     id="cnicFront"
-                    onChange={(e) => setCnicFront(e.target.files[0])}
+                    onChange={(e) =>
+                      handleFileUpload(
+                        e.target.files[0],
+                        setCnicFront,
+                        "CNIC Front"
+                      )
+                    }
                     className="hidden"
                     required
                   />
@@ -466,6 +503,7 @@ export default function ProfileForm({ userData }) {
                     {userData.cnicFrontUrl ? "" : "Upload CNIC Front"}
                   </label>
                 </div>
+                {/* CNIC Back */}
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
                   <div className="mb-4">
                     <img
@@ -480,10 +518,17 @@ export default function ProfileForm({ userData }) {
                       className="mx-auto w-40 h-28 bg-gray-200"
                     />
                   </div>
+
                   <input
                     type="file"
                     id="cnicBack"
-                    onChange={(e) => setCnicBack(e.target.files[0])}
+                    onChange={(e) =>
+                      handleFileUpload(
+                        e.target.files[0],
+                        setCnicBack,
+                        "CNIC Back"
+                      )
+                    }
                     className="hidden"
                     required
                   />
@@ -495,7 +540,7 @@ export default function ProfileForm({ userData }) {
                     {userData.cnicBackUrl ? "" : "Upload CNIC Back"}
                   </label>
                 </div>
-                {/* profile pic  */}
+                {/* Profile Picture */}
                 {!userData.profileImageUrl &&
                   userData.profileImageUrl !== "" && (
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
@@ -515,7 +560,13 @@ export default function ProfileForm({ userData }) {
                       <input
                         type="file"
                         id="profileImage"
-                        onChange={(e) => setProfileImage(e.target.files[0])}
+                        onChange={(e) =>
+                          handleFileUpload(
+                            e.target.files[0],
+                            setProfileImage,
+                            "Profile Image"
+                          )
+                        }
                         className="hidden"
                         required
                       />
@@ -562,7 +613,6 @@ export default function ProfileForm({ userData }) {
                       disabled={qualifications.length > 0}
                     >
                       <option value="">Select Qualification</option>
-
                       <option value="Bachelor">Bachelor</option>
                       <option value="Master">Master</option>
                       <option value="MPhil">MPhil</option>
@@ -647,7 +697,9 @@ export default function ProfileForm({ userData }) {
                     <input
                       type="file"
                       id="degree"
-                      onChange={(e) => setDegree(e.target.files[0])}
+                      onChange={(e) =>
+                        handleFileUpload(e.target.files[0], setDegree, "Degree")
+                      }
                       className="hidden"
                       required
                     />
@@ -680,7 +732,7 @@ export default function ProfileForm({ userData }) {
               </>
             )}
 
-            {/* from user */}
+            {/* Qualifications from user */}
             {qualifications.length > 0 && (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -722,7 +774,7 @@ export default function ProfileForm({ userData }) {
               </div>
             )}
 
-            {/* from db */}
+            {/* Qualifications from database */}
             {isUserDataComplete() && (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">

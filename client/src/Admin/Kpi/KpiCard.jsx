@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+/* eslint-disable react/prop-types */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const KpiCard = ({
@@ -43,13 +42,6 @@ const KpiCard = ({
       </div>
     </div>
   );
-};
-
-KpiCard.propTypes = {
-  heading: PropTypes.string.isRequired,
-  icon: PropTypes.object.isRequired, // FontAwesome icon object
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  bgColor: PropTypes.string.isRequired, // Background color for the icon
 };
 
 export default KpiCard;

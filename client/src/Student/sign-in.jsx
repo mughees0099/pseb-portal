@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -8,6 +8,7 @@ import { Oval } from "react-loader-spinner";
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   function handleLogin(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -20,7 +21,7 @@ export default function SignIn() {
         localStorage.setItem("user", JSON.stringify(res.data.token));
         setIsLoading(false);
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "/candidate/profile/register";
         }, 1500);
 
         toast.success("Logged in successfully", {
