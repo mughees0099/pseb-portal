@@ -13,14 +13,59 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import rateLimit from "express-rate-limit";
+import { set } from "mongoose";
 
 dotenv.config();
 
 const App = express();
 
 App.use(express.json());
-App.use(cors());
 App.use(cookieParser());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const allowedOrigins = [
+  "https://your-frontend-domain.com",
+  "http://localhost:5173",
+  "http://127.0.0.1:5174",
+  "http://localhost:4000",
+];
+
+const originCheckMiddleware = (req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    next();
+  } else {
+    res.status(404).sendFile(path.join(__dirname, "public", "404.html")); // Serve custom 404 page
+  }
+};
+
+App.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+  })
+);
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per 15 minutes
+  message: {
+    message:
+      "Too many requests from this IP. Please try again after 15 minutes.",
+  },
+});
+// Apply origin check globally (no `/api` prefix needed)
+App.use(originCheckMiddleware);
+
+// Apply rate limiting to specific routes
+App.use("/signin", limiter);
+App.use("/register", limiter);
+App.use("/forgot-password", limiter);
+App.use("/admin", limiter); // Rate limit for unprotected admin endpoint
 
 connectDB();
 
@@ -447,3 +492,79 @@ const PORT = process.env.PORT || 4000;
 App.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// App.get("/users", async (req, res) => {
+//   const users = await User.find({});
+//   const personalInfo = await UserInformation.find({});
+//   const course = await Course.find({});
+//   const cnic = [];
+//   const personalInfoData = [];
+//   const finalData2 = [];
+
+//   const data = users.map((user) => {
+//     cnic.push(user.cnic);
+//   });
+//   const data1 = personalInfo.map((user) => {
+//     personalInfoData.push(user.cnic);
+//   });
+//   const finalData = cnic.filter((value) => !personalInfoData.includes(value));
+//   // res.send(cnic);
+//   // console.log(personalInfoData.length);
+//   // res.send(personalInfoData);
+//   await users.filter(
+//     (user) => !personalInfoData.includes(user.cnic) && finalData2.push(user)
+//   );
+
+//   finalData2.map((data) => {
+//     if (personalInfoData.includes(data.cnic)) {
+//       console.log("yes", data.cnic);
+//     }
+//   });
+//   const final = [];
+//   finalData2.map((data) => {
+//     final.push({
+//       cnic: data.cnic,
+//       fullName: data.fullName,
+//       email: data.email,
+//       mobile: data.mobile,
+//     });
+//   });
+//   // console.log("f", final);
+//   const coursesNonApp = [];
+//   course.map((data) => {
+//     coursesNonApp.push(data.cnic);
+//   });
+//   const dat = personalInfo.filter(
+//     (value) => !coursesNonApp.includes(value.cnic)
+//   );
+//   const finalData6 = [];
+//   dat.map((data) => {
+//     finalData6.push(data.cnic);
+//   });
+//   const finalData7 = [];
+//   finalData6.map(async (data) => {
+//     const data2 = await User.findOne({ cnic: data });
+
+//     if (data2) {
+//       finalData7.push({
+//         cnic: data2.cnic,
+//         fullName: data2.fullName,
+//         email: data2.email,
+//         mobile: data2.mobile,
+//       });
+//     }
+//   });
+
+//   setTimeout(() => {
+//     console.log("f", finalData7.length);
+//     res.send(finalData7);
+//   }, 5000);
+//   // console.log("f", finalData7);
+
+//   // res.send(finalData2);
+
+//   // res.send(finalData2);
+//   // console.log("f", finalData.length);
+//   // console.log(users);
+//   // res.send(users);
+// });

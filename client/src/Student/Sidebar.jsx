@@ -12,7 +12,7 @@ export default function Sidebar({ open, setOpen, handleLogout }) {
     <div
       className={`${
         open ? "block" : "hidden"
-      } fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white md:block md:static md:translate-x-0 transition-transform transform`}
+      } fixed  inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white md:block md:static md:translate-x-0 transition-transform transform`}
     >
       {isPopupOpen && (
         <PopUp

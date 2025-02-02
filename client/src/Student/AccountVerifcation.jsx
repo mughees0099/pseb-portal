@@ -48,7 +48,7 @@ export default function AccountVerification() {
           Please enter the OTP sent to your email: <strong>{email}</strong>
         </p>
         <div className="space-y-4">
-          <form className="">
+          <form className="" onSubmit={(e) => e.preventDefault()}>
             <div>
               <label className="block text-sm font-medium mb-1">OTP</label>
               <input

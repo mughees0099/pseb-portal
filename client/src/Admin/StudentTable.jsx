@@ -1,56 +1,48 @@
-/* eslint-disable react/prop-types */
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-
-const Table = ({ data, onEdit }) => {
+const Table = ({ data = [] }) => {
   return (
-    <div className="overflow-x-auto ">
-      <table className="min-w-full bg-white border-gray-200 rounded-md h-full">
-        <thead className="bg-gray-100 ">
-          <tr>
+    <table className="min-w-full divide-y divide-gray-200">
+      <thead>
+        <tr>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+            Full Name
+          </th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+            Gender
+          </th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+            Trade
+          </th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+            City
+          </th>
+          {window.location.pathname === "/admin/std" && (
             <th className="text-left px-4 py-2 font-medium text-gray-600">
-              Full Name
+              Actions
             </th>
-            <th className="text-left px-4 py-2 font-medium text-gray-600">
-              Gender
-            </th>
-            <th className="text-left px-4 py-2 font-medium text-gray-600">
-              Trade
-            </th>
-            <th className="text-left px-4 py-2 font-medium text-gray-600">
-              City
-            </th>
+          )}
+        </tr>
+      </thead>
+      <tbody className="bg-white divide-y divide-gray-200">
+        {data.map((record, index) => (
+          <tr key={index}>
+            <td className="px-6 py-4">{record.fullName}</td>
+            <td className="px-6 py-4">{record.gender}</td>
+            <td className="px-6 py-4">{record.trade}</td>
+            <td className="px-6 py-4">{record.city}</td>
             {window.location.pathname === "/admin/std" && (
-              <th className="text-left px-4 py-2 font-medium text-gray-600">
-                Actions
-              </th>
+              <td className="px-6 py-4">
+                <button
+                  onClick={record.onEdit} // Call the onEdit function
+                  className="text-blue-600 hover:underline"
+                >
+                  Edit
+                </button>
+              </td>
             )}
           </tr>
-        </thead>
-        <tbody>
-          {data.map((row) => (
-            <tr key={row.cnic} className="border-b hover:bg-gray-50">
-              <td className="px-4 py-2 text-blue-600 font-medium cursor-pointer">
-                {row.fullName}
-              </td>
-              <td className="px-4 py-2 text-gray-800">{row.gender}</td>
-              <td className="px-4 py-2 text-gray-800">{row.trade}</td>
-              <td className="px-4 py-2 text-gray-800">{row.city}</td>
-              {window.location.pathname === "/admin/std" && (
-                <td className="px-4 py-2 flex space-x-2">
-                  <button
-                    className="text-blue-500 hover:text-blue-700"
-                    onClick={() => onEdit(row.cnic, row.trade)} // Trigger the edit function with the row's id
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                </td>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 };
 

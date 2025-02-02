@@ -7,7 +7,7 @@ import { Oval } from "react-loader-spinner";
 import PopUp from "./PopUp";
 import "./Profile.css";
 import { useNavigate } from "react-router-dom";
-import { validateFile } from "./utils/fileValidation.js";
+import { validateFile } from "./fileValidation.js";
 
 export default function ProfileForm({ userData }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -279,6 +279,9 @@ export default function ProfileForm({ userData }) {
               <div>
                 <label className="block text-sm font-medium mb-1">
                   {`Father's`} Name - والد کا نام{" "}
+                  {userData.fatherName && (
+                    <span className="text-red-600 font-bold">*</span>
+                  )}
                 </label>
                 <input
                   type="text"

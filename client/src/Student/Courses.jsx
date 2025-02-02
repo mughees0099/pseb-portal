@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Oval } from "react-loader-spinner";
 
 const course = [
   {
@@ -114,7 +115,7 @@ export default function Courses({ userData }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 ">
       <h1 className="text-3xl font-bold mb-8">Choose Program</h1>
       <p className="text-red-500 mb-4">
         You {"can't"} apply for more than 2 courses
@@ -207,6 +208,7 @@ export function CourseDetail({ userData }) {
   const { courseId, city } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const selectedCourse = courses.find(
@@ -216,6 +218,7 @@ export function CourseDetail({ userData }) {
   }, [courseId]);
 
   const handleApplyClick = (courseId) => {
+    setLoading(true);
     const selectedCourse = courses.find((course) => course.id === courseId);
     if (!selectedCourse) return;
     const cnic = userData.cnic;
@@ -233,17 +236,19 @@ export function CourseDetail({ userData }) {
         category,
       })
       .then(() => {
+        setLoading(false);
         navigate("/");
       })
       .catch((err) => {
+        setLoading(false);
         toast.error(err.response.data.message);
       });
   };
 
-  if (!course) return <div>Loading...</div>;
+  if (!course || !userData) return <div>Loading...</div>;
 
   return (
-    <div className="container mx-auto  px-4 py-8">
+    <div className="container mx-auto  px-4 py-8 md:h-screen h-full">
       <div className="bg-white shadow-md rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4">{course.title}</h1>
         <p className="text-gray-600 mb-4">{course.description}</p>
@@ -256,8 +261,13 @@ export function CourseDetail({ userData }) {
         <button
           onClick={() => handleApplyClick(course.id)}
           className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          disabled={loading}
         >
-          Apply Now
+          {loading ? (
+            <Oval height="26" width="26" color="white" ariaLabel="loading" />
+          ) : (
+            "Apply Now"
+          )}
         </button>
       </div>
     </div>

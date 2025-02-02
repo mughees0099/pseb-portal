@@ -41,13 +41,12 @@ export default function Sidebar({ open, setOpen }) {
           <Users className=" h-6 w-6 m-auto" />
           {/* Students */}
         </Link>
-        {/* <Link
+        <Link
           to="/admin/reports"
           className="group flex items-center justify-center text-base font-medium rounded-md text-white bg-gray-900 p-4 mb-2"
         >
           <BarChart2 className=" h-6 w-6 m-auto" />
-        
-        </Link> */}
+        </Link>
         <Link
           className="group flex items-center justify-center text-base font-medium rounded-md text-white bg-gray-900 p-4 mb-2"
           onClick={handleLogout}

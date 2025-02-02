@@ -18,7 +18,7 @@ import ForgotPassword from "./Student/ForgotPassword";
 import { ResetPasswordOtp, ResetPassword } from "./Student/ResetPassword";
 import Students from "./Admin/pages/Students";
 import TableWithFilters from "./Admin/TableWithFilters";
-import mockData from "./Admin/mockData";
+
 import Reports from "./Admin/pages/Reports";
 import CandidatesTable from "./Admin/pages/CandidatesTable";
 import Batches from "./Admin/pages/Batches";
@@ -26,6 +26,8 @@ import BatchDetails from "./Admin/pages/BatchDetails";
 import MarkAttendance from "./Admin/MarkAttendance";
 import TitleLayout from "./TitleLayout.jsx";
 import { Oval } from "react-loader-spinner";
+import Footer from "./Student/Footer.jsx";
+import NotFound from "./NotFound.jsx";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -91,72 +93,87 @@ function App() {
   );
 
   useEffect(() => {
-    setDataLoading(true);
-    setLoading(true);
-    const fetchData = async () => {
-      await axios
-        .get(`${import.meta.env.VITE_API_URL}/users`)
-        .then((res) => setUserInfo(res.data));
+    try {
+      setDataLoading(true);
+      setLoading(true);
+      const fetchData = async () => {
+        await axios
+          .get(`${import.meta.env.VITE_API_URL}/users`)
+          .then((res) => setUserInfo(res.data));
 
-      await axios
-        .get(`${import.meta.env.VITE_API_URL}/courses`)
-        .then((res) => setCourses(res.data));
-      const results = await Promise.all(
-        uniqueData.map((student) =>
-          axios
-            .get(`${import.meta.env.VITE_API_URL}/user/${student.cnic}`)
-            .then((res) => res.data)
-            .catch(() => {
-              return null;
-            })
-        )
-      );
+        await axios
+          .get(`${import.meta.env.VITE_API_URL}/courses`)
+          .then((res) => setCourses(res.data));
+        const results = await Promise.all(
+          uniqueData.map((student) =>
+            axios
+              .get(`${import.meta.env.VITE_API_URL}/user/${student.cnic}`)
+              .then((res) => res.data)
+              .catch(() => {
+                return null;
+              })
+          )
+        );
 
-      setUsersData(results.filter((res) => res !== null));
-    };
+        setUsersData(results.filter((res) => res !== null));
+      };
 
-    fetchData();
-    setDataLoading(false);
-    setLoading(false);
+      fetchData();
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    } finally {
+      setDataLoading(false);
+      setLoading(false);
+    }
   }, [uniqueData]);
 
   // Check if user is logged in
   useEffect(() => {
-    setDataLoading(true);
-    setLoading(true);
-    const token = localStorage.getItem("user");
-    const user = localStorage.getItem("id");
-    if (token) {
-      setIsAuthenticated(true);
-      setUser(user);
+    try {
+      setDataLoading(true);
+      setLoading(true);
+      const token = localStorage.getItem("user");
+      const user = localStorage.getItem("id");
+      if (token) {
+        setIsAuthenticated(true);
+        setUser(user);
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    } finally {
+      setDataLoading(false);
+      setLoading(false);
     }
-    setDataLoading(false);
-    setLoading(false);
   }, []);
 
   useEffect(() => {
-    setDataLoading(true);
-    setLoading(true);
-    if (isAuthenticated) {
-      axios
-        .get(`${import.meta.env.VITE_API_URL}/user/${user}`)
-        .then((res) => {
-          setUserData(res.data);
-          setIsAdmin(res.data.isAdmin);
-        })
-        .catch(() => {
-          setUserData({});
-          setIsAdmin(false);
+    try {
+      setDataLoading(true);
+      setLoading(true);
+      if (isAuthenticated) {
+        axios
+          .get(`${import.meta.env.VITE_API_URL}/user/${user}`)
+          .then((res) => {
+            setUserData(res.data);
+            setIsAdmin(res.data.isAdmin);
+          })
+          .catch(() => {
+            setUserData({});
+            setIsAdmin(false);
+          });
+        axios.get(`${import.meta.env.VITE_API_URL}/admin`).then((res) => {
+          setAdminData(res.data);
         });
-      axios.get(`${import.meta.env.VITE_API_URL}/admin`).then((res) => {
-        setAdminData(res.data);
-      });
-    } else {
-      setUserData({});
-      setIsAdmin(false);
+      } else {
+        setUserData({});
+        setIsAdmin(false);
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    } finally {
+      setDataLoading(false);
+      setLoading(false);
     }
-    setDataLoading(false);
-    setLoading(false);
   }, [user, isAuthenticated]);
 
   const handleLogout = () => {
@@ -215,16 +232,17 @@ function App() {
   }
 
   return (
-    <>
+    <div>
       {!loading &&
         isAuthenticated &&
         !window.location.pathname.startsWith("/admin") && (
           <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         )}
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex h-full bg-gray-100 ">
         {!loading &&
           isAuthenticated &&
           isAdmin === false &&
+          !window.document.title.startsWith("Not Found") &&
           !window.location.pathname.startsWith("/admin") && (
             <Sidebar
               open={sidebarOpen}
@@ -232,10 +250,11 @@ function App() {
               handleLogout={handleLogout}
             />
           )}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+        {/* one */}
+        <main className="flex-1 w-full max-w-[1600px] mx-auto bg-gray-100">
           <Routes>
             {/* Public Routes */}
-            <Route element={<TitleLayout title="Sign In | PSEB" />}>
+            <Route element={<TitleLayout title="Sign In " />}>
               <Route
                 path="/signin/:id"
                 element={
@@ -245,9 +264,7 @@ function App() {
                 }
               />
             </Route>
-            <Route
-              element={<TitleLayout title="Candidate Registration | PSEB" />}
-            >
+            <Route element={<TitleLayout title="Candidate Registration " />}>
               <Route
                 path="/register/:id/new/:id"
                 element={
@@ -257,7 +274,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Forgot Password | PSEB" />}>
+            <Route element={<TitleLayout title="Forgot Password " />}>
               <Route
                 path="/forgot/:id/password/:id"
                 element={
@@ -267,9 +284,7 @@ function App() {
                 }
               />
             </Route>
-            <Route
-              element={<TitleLayout title="Account Verification | PSEB" />}
-            >
+            <Route element={<TitleLayout title="Account Verification " />}>
               <Route
                 path="/:id/account/:id/verification/:id"
                 element={
@@ -279,7 +294,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Reset Password OTP | PSEB" />}>
+            <Route element={<TitleLayout title="Reset Password OTP " />}>
               <Route
                 path="/:id/otp/:id/:cnic/verification/:id"
                 element={
@@ -289,7 +304,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Reset Password | PSEB" />}>
+            <Route element={<TitleLayout title="Reset Password " />}>
               <Route
                 path="/reset/:id/pa/:id/:cnic/ss/:id"
                 element={
@@ -300,7 +315,7 @@ function App() {
               />
             </Route>
             {/* Private Routes */}
-            <Route element={<TitleLayout title="Student Dashboard | PSEB" />}>
+            <Route element={<TitleLayout title="Student Dashboard " />}>
               <Route
                 path="/"
                 element={
@@ -310,7 +325,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Candidate Profile | PSEB" />}>
+            <Route element={<TitleLayout title="Candidate Profile " />}>
               <Route
                 path="/candidate/profile/register"
                 element={
@@ -320,7 +335,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Student Detail | PSEB" />}>
+            <Route element={<TitleLayout title="Student Detail " />}>
               <Route
                 path="/students/:id"
                 element={
@@ -330,7 +345,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Courses | PSEB" />}>
+            <Route element={<TitleLayout title="Courses " />}>
               <Route
                 path="/courses"
                 element={
@@ -340,7 +355,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Course Detail | PSEB" />}>
+            <Route element={<TitleLayout title="Course Detail " />}>
               <Route
                 path="/course/:courseId/:city"
                 element={
@@ -351,7 +366,7 @@ function App() {
               />
             </Route>
             {/* Admin Routes */}
-            <Route element={<TitleLayout title="Admin Dashboard | PSEB" />}>
+            <Route element={<TitleLayout title="Admin Dashboard " />}>
               <Route
                 path="/admin"
                 element={
@@ -368,7 +383,7 @@ function App() {
                 }
               />
             </Route>
-            <Route element={<TitleLayout title="Students | PSEB" />}>
+            <Route element={<TitleLayout title="Students " />}>
               <Route
                 path="/admin/Std"
                 element={
@@ -386,50 +401,62 @@ function App() {
                 }
               />
             </Route>
-            <Route path="/" element={<TableWithFilters data={mockData} />} />
-            <Route element={<TitleLayout title="Edit Student | PSEB" />}>
+            <Route path="/" element={<TableWithFilters />} />
+            <Route element={<TitleLayout title="Edit Student " />}>
               <Route
                 path="/admin/edit/:cnic/:trade"
                 element={isAdmin === true && <StudentDetail />}
               />
             </Route>
-            <Route element={<TitleLayout title="Reports | PSEB" />}>
+            <Route element={<TitleLayout title="Reports " />}>
               <Route
                 path="/admin/reports"
                 element={isAdmin === true && <Reports />}
               />
             </Route>
-            <Route element={<TitleLayout title="Candidates | PSEB" />}>
+            <Route element={<TitleLayout title="Candidates " />}>
               <Route
                 path="/admin/candidates"
                 element={isAdmin === true && <CandidatesTable />}
               />
             </Route>
-            <Route element={<TitleLayout title="Batches | PSEB" />}>
+            <Route element={<TitleLayout title="Batches " />}>
               <Route
                 path="/admin/batches"
                 element={isAdmin === true && <Batches />}
               />
             </Route>
-            <Route element={<TitleLayout title="Batch Details | PSEB" />}>
+            <Route element={<TitleLayout title="Batch Details " />}>
               <Route
                 path="/admin/batches/:batchId"
                 element={isAdmin === true && <BatchDetails />}
               />
             </Route>
-            <Route element={<TitleLayout title="Mark Attendance | PSEB" />}>
+            <Route element={<TitleLayout title="Mark Attendance " />}>
               <Route
                 path="/admin/batch/:batchId/mark-attendance"
                 element={isAdmin === true && <MarkAttendance />}
               />
             </Route>
-            <Route path="*" element={<h1>Not </h1>} />
+            <Route element={<TitleLayout title="Not Found " />}>
+              <Route path="*" element={<NotFound />} />
+            </Route>
           </Routes>
+          {!loading &&
+            isAuthenticated &&
+            isAdmin === false &&
+            !window.document.title.startsWith("Not Found") &&
+            !window.location.pathname.startsWith("/admin") && (
+              <Footer
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
+            )}
         </main>
       </div>
 
       <ToastContainer />
-    </>
+    </div>
   );
 }
 

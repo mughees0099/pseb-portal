@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -8,7 +8,6 @@ import { Oval } from "react-loader-spinner";
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   function handleLogin(e) {
     e.preventDefault();
     setIsLoading(true);
@@ -93,6 +92,9 @@ export default function SignIn() {
               <li>Max age: 55 years.</li>
             </ul>
           </div>
+          <p className="text-gray-300 max-w-2xl pt-8  font-bold">
+            For any issue, contact us via WhatsApp or call us at 03186413893.
+          </p>
         </div>
       </div>
 
